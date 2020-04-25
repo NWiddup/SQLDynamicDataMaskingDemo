@@ -57,6 +57,7 @@ INSERT INTO dbo.CustomerInfo
         'troberts@contoso.com'
     );
 GO 
+
 -- create some demo users
 CREATE USER [tim1] WITHOUT LOGIN WITH DEFAULT_SCHEMA=[dbo]
 GO 
@@ -75,9 +76,10 @@ SELECT SESSION_CONTEXT(N'executingUser') AS WhoAmI
 EXECUTE AS USER = 'tim1'
 SELECT * FROM dbo.CustomerInfo
 revert
+
 EXECUTE AS USER = 'amy1'
-SELECT *
-FROM dbo.CustomerInforevert
+SELECT * FROM dbo.CustomerInfo
+revert
 
 -- create procedures to cache who is executing the query
 CREATE PROCEDURE dbo.setExecContext
@@ -97,10 +99,14 @@ GO
 
 -- show the SESSION_CONTEXT in action
 SELECT SESSION_CONTEXT(N'executingUser') AS WhoAmI
+
 DECLARE @curUser nvarchar(10) = N'tim1'
 EXEC dbo.setexecContext @curUser
+
 select SESSION_CONTEXT(N'executingUser') AS WhoAmI
+
 EXEC dbo.revertexecContext
+
 select SESSION_CONTEXT(N'executingUser') AS WhoAmI
 
 -- create procedure to get customer info
